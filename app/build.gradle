@@ -46,6 +46,7 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+    namespace 'com.fs.jayrek.taskcompose'
 }
 
 dependencies {
@@ -83,6 +84,7 @@ dependencies {
 
     /**test*/
     testImplementation "junit:junit:$rootProject.jUnitTest"
+    testImplementation "io.mockk:mockk:$rootProject.mockkTest"
     testImplementation "com.google.truth:truth:$rootProject.truthTest"
     testImplementation "org.mockito:mockito-core:$rootProject.mockitoTest"
     testImplementation "androidx.arch.core:core-testing:$rootProject.archCoreTest"
