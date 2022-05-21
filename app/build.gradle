@@ -83,7 +83,13 @@ dependencies {
 
     /**test*/
     testImplementation "junit:junit:$rootProject.jUnitTest"
-    androidTestImplementation "androidx.test.ext:junit:$rootProject.jUnitExt"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espresso"
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$rootProject.compose"
+    testImplementation "com.google.truth:truth:$rootProject.truthTest"
+    testImplementation "org.mockito:mockito-core:$rootProject.mockitoTest"
+    testImplementation "androidx.arch.core:core-testing:$rootProject.archCoreTest"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$rootProject.coroutinesTest"
+
+    androidTestImplementation "androidx.test.ext:junit:$rootProject.jUnitExtAndroidTest"
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$rootProject.composeAndroidTest"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espressoAndroidTest"
+
 }
