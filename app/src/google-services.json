@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "650438891713",
+    "project_id": "taskcompose",
+    "storage_bucket": "taskcompose.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:650438891713:android:bb04abb06a011e383b1c40",
+        "android_client_info": {
+          "package_name": "com.fs.jayrek.taskcompose"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "650438891713-baeg5gu6jank1d0sgbdmcq5piasmtfiu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhR0FtU157X4NcnJjzceFWuiyVHTp9d0k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "650438891713-baeg5gu6jank1d0sgbdmcq5piasmtfiu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
