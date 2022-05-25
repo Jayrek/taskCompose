@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package jp.co.tristone.akaso
+package com.fs.jayrek.taskcompose
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
@@ -29,7 +29,7 @@ import java.util.concurrent.TimeoutException
  * `InstantTaskExecutorRule` or a similar mechanism to execute tasks synchronously.
  */
 @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-fun <T> LiveData<T>.getOrAwaitValueTest(
+fun <T> LiveData<T>.getOrAwaitValue(
     time: Long = 2,
     timeUnit: TimeUnit = TimeUnit.SECONDS,
     afterObserve: () -> Unit = {}
@@ -40,7 +40,7 @@ fun <T> LiveData<T>.getOrAwaitValueTest(
         override fun onChanged(o: T?) {
             data = o
             latch.countDown()
-            this@getOrAwaitValueTest.removeObserver(this)
+            this@getOrAwaitValue.removeObserver(this)
         }
     }
     this.observeForever(observer)
