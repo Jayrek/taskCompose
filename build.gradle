@@ -12,9 +12,15 @@ buildscript {
         coroutinesPlayServices = '1.1.1'
 
         /**test*/
-        jUnitExt = '1.1.3'
+        truthTest = '1.1.3'
         jUnitTest = '4.13.2'
-        espresso = '3.4.0'
+        mockkTest = '1.12.3'
+        archCoreTest = '2.1.0'
+        coroutinesTest = '1.6.0'
+        mockitoTest = '3.10.0'
+        composeAndroidTest = '1.1.1'
+        jUnitExtAndroidTest = '1.1.3'
+        espressoAndroidTest = '3.4.0'
     }
 
     repositories {
@@ -29,8 +35,8 @@ buildscript {
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 plugins {
-    id 'com.android.application' version '7.1.3' apply false
-    id 'com.android.library' version '7.1.3' apply false
+    id 'com.android.application' version '7.2.0' apply false
+    id 'com.android.library' version '7.2.0' apply false
     id 'org.jetbrains.kotlin.android' version '1.6.10' apply false
 }
 
