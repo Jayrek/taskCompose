@@ -17,38 +17,34 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(private val _repo: IAuthRepository) : ViewModel() {
 
+    private val _loader = MutableLiveData(false)
     private val _authStatus = MutableLiveData<Resource<AuthResult>>()
     private val _snapShot = MutableLiveData<Resource<DocumentSnapshot>>()
     private val _user = MutableLiveData<FirebaseUser?>()
     private val _isLogOut: MutableLiveData<Resource<Boolean>> = MutableLiveData()
 
+    val loader: LiveData<Boolean> = _loader
     val authStatus: LiveData<Resource<AuthResult>> = _authStatus
     val snapShot: LiveData<Resource<DocumentSnapshot>> = _snapShot
     val user: LiveData<FirebaseUser?> = _user
     val isLogout: LiveData<Resource<Boolean>> = _isLogOut
 
     fun signIn(email: String, password: String) {
+        _loader.postValue(true)
         viewModelScope.launch {
-            try {
-                _authStatus.postValue(Resource.Loading())
-                val response = _repo.signInWithEmail(email, password)
-                _authStatus.postValue(response)
-            } catch (e: Exception) {
-                _authStatus.postValue(Resource.Error(e.message.toString()))
-            }
+            val response = _repo.signInWithEmail(email, password)
+            _authStatus.postValue(response)
         }
+        _loader.postValue(false)
     }
 
     fun signUp(email: String, fName: String, lName: String, password: String) {
+        _loader.postValue(true)
         viewModelScope.launch {
-            try {
-                _authStatus.postValue(Resource.Loading())
-                val response = _repo.signUpWithEmail(email, password, fName, lName)
-                _authStatus.postValue(response)
-            } catch (e: Exception) {
-                _authStatus.postValue(Resource.Error(e.message.toString()))
-            }
+            val response = _repo.signUpWithEmail(email, password, fName, lName)
+            _authStatus.postValue(response)
         }
+        _loader.postValue(false)
     }
 
     fun getUser() {

@@ -23,9 +23,12 @@ class AuthRepositoryImpl @Inject constructor(
     ): Resource<AuthResult> {
         return withContext(Dispatchers.IO) {
             safeApiCall {
-                Resource.Success(
-                    _auth.signInWithEmailAndPassword(email, password).await()
-                )
+                try {
+                    val response = _auth.signInWithEmailAndPassword(email, password).await()
+                    Resource.Success(response)
+                } catch (e: Exception) {
+                    Resource.Error(e.message.toString())
+                }
             }
         }
     }
@@ -36,16 +39,21 @@ class AuthRepositoryImpl @Inject constructor(
     ): Resource<AuthResult> {
         return withContext(Dispatchers.IO) {
             safeApiCall {
-                val auth =
-                    _auth.createUserWithEmailAndPassword(email, password)
-                        .await()
+                try {
+                    val auth =
+                        _auth.createUserWithEmailAndPassword(email, password)
+                            .await()
+                    Resource.Success(auth)
+                } catch (e: Exception) {
+                    Resource.Error(e.message.toString())
+                }
 
-                val user = User(fName, lName)
-                _fireStore.collection(StringConstants.DOCUMENT_USER)
-                    .document(auth.user!!.uid)
-                    .set(user)
-                    .await()
-                Resource.Success(auth)
+//                val user = User(fName, lName)
+//                _fireStore.collection(StringConstants.DOCUMENT_USER)
+//                    .document(auth.user!!.uid)
+//                    .set(user)
+//                    .await()
+//                Resource.Success(auth)
             }
         }
     }
