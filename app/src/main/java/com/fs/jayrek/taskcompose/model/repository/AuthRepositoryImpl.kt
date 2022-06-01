@@ -35,42 +35,63 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun signUpWithEmail(
         email: String,
-        password: String, fName: String, lName: String
+        password: String
     ): Resource<AuthResult> {
         return withContext(Dispatchers.IO) {
             safeApiCall {
                 try {
-                    val auth =
+                    Resource.Success(
                         _auth.createUserWithEmailAndPassword(email, password)
                             .await()
-                    Resource.Success(auth)
+                    )
                 } catch (e: Exception) {
                     Resource.Error(e.message.toString())
                 }
-
-//                val user = User(fName, lName)
-//                _fireStore.collection(StringConstants.DOCUMENT_USER)
-//                    .document(auth.user!!.uid)
-//                    .set(user)
-//                    .await()
-//                Resource.Success(auth)
             }
         }
     }
+
+    override suspend fun saveUserInfo(
+        uid: String,
+        fName: String,
+        lName: String,
+        email: String
+    ): Boolean {
+        return try {
+            val user = User(fName, lName, email)
+            _fireStore.collection(StringConstants.DOCUMENT_USER).document(uid).set(user)
+                .await()
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    override fun getCurrentUserId(): String? = _auth.currentUser?.uid
 
     override suspend fun getUserInfo(
         uid: String
     ): Resource<DocumentSnapshot> {
         return withContext(Dispatchers.IO) {
             safeApiCall {
-                Resource.Success(
-                    _fireStore.collection(StringConstants.DOCUMENT_USER)
-                        .document(uid)
-                        .get().await()
-                )
+                try {
+                    Resource.Success(
+                        _fireStore.collection(StringConstants.DOCUMENT_USER)
+                            .document(uid)
+                            .get().await()
+                    )
+                } catch (e: Exception) {
+                    Resource.Error(e.message.toString())
+                }
             }
         }
     }
 
-    override fun checkUser(): FirebaseUser? = _auth.currentUser
+    override fun checkUser(): FirebaseUser? {
+        return try {
+            _auth.currentUser
+        } catch (e: Exception) {
+            null
+        }
+    }
 }
