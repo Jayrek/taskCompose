@@ -210,5 +210,4 @@
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.sqlite:sqlite:2.3.0-alpha01@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.arch.core:core-testing:2.1.0@aar" level="project" />
   </component>
-  <component name="TestModuleProperties" production-module="TaskCompose.app.main" />
 </module>
