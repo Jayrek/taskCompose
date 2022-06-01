@@ -67,7 +67,7 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun `sign in check returns resource success`() = runBlocking {
+    fun signInCheckReturnsResourceSuccess() = runBlocking {
         `when`(auth.signInWithEmailAndPassword(email, password)).thenReturn(mockTask())
 
         viewModel.signIn(email, password)
@@ -79,7 +79,7 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun `sign in check returns resource error exception`() = runBlocking {
+    fun signInCheckReturnsResourceErrorException() = runBlocking {
         `when`(auth.signInWithEmailAndPassword(email, password)).thenReturn(mockTask(Exception()))
 
         viewModel.signIn(email, password)
@@ -91,7 +91,7 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun `sign up check returns resource success`() = runBlocking {
+    fun signUpCheckReturnsResourceSuccess() = runBlocking {
         `when`(auth.createUserWithEmailAndPassword(email, password)).thenReturn(mockTask())
 
         viewModel.signUp(email, password)
@@ -103,7 +103,7 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun `save user information to fireStore`() = runBlocking {
+    fun saveUserInfoToFireStore() = runBlocking {
         `when`(auth.currentUser).thenReturn(firebaseUser)
         `when`(auth.currentUser?.uid.toString()).thenReturn(uid)
 
@@ -118,7 +118,7 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun `sign up check returns resource error exception`() = runBlocking {
+    fun signUpCheckReturnsResourceErrorException() = runBlocking {
         `when`(
             auth.createUserWithEmailAndPassword(
                 email,
@@ -135,7 +135,7 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun `check if has user`() = runBlocking {
+    fun checkIfHasUser() = runBlocking {
         `when`(auth.currentUser).thenReturn(firebaseUser)
 
         viewModel.checkUserLogIn()
@@ -146,7 +146,7 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun `get user information`() = runBlocking {
+    fun getUserInformation() = runBlocking {
         `when`(auth.currentUser).thenReturn(firebaseUser)
         `when`(auth.currentUser?.uid.toString()).thenReturn(uid)
 
@@ -159,7 +159,6 @@ class AuthViewModelTest {
         val loader = viewModel.loader.getOrAwaitValue()
         assertThat(user is Resource.Success).isTrue()
         assertThat(loader).isFalse()
-
     }
 
     private inline fun <reified T> mockTask(exception: Exception? = null): Task<T> {
