@@ -38,37 +38,49 @@ class AuthViewModel @Inject constructor(private val _repo: IAuthRepository) : Vi
         _loader.postValue(false)
     }
 
-    fun signUp(email: String, fName: String, lName: String, password: String) {
+    fun signUp(email: String, password: String) {
         _loader.postValue(true)
         viewModelScope.launch {
-            val response = _repo.signUpWithEmail(email, password, fName, lName)
+            val response = _repo.signUpWithEmail(email, password)
             _authStatus.postValue(response)
         }
         _loader.postValue(false)
     }
 
-    fun getUser() {
-        viewModelScope.launch {
-            try {
-                _snapShot.postValue(Resource.Loading())
-                val uid = FirebaseAuth.getInstance().currentUser!!.uid
-                val snap = _repo.getUserInfo(uid)
-                _snapShot.postValue(snap)
-            } catch (e: Exception) {
-                _snapShot.postValue(Resource.Error(e.message.toString()))
+    private fun getCurrentUserId(): String? = _repo.getCurrentUserId()
+
+    fun saveUserDocument(fName: String, lName: String, email: String): Boolean {
+        _loader.postValue(true)
+        return try {
+            val uid = getCurrentUserId().toString()
+            viewModelScope.launch {
+                _repo.saveUserInfo(uid, fName, lName, email)
             }
+            _loader.postValue(false)
+            true
+        } catch (e: Exception) {
+            _loader.postValue(false)
+            false
         }
     }
 
-    fun checkUserLogIn() {
+    fun getUser() {
+        _loader.postValue(true)
         viewModelScope.launch {
-            try {
-                val repository = _repo.checkUser()
-                _user.postValue(repository!!)
-            } catch (e: Exception) {
-                _user.postValue(null)
-            }
+            val uid = getCurrentUserId().toString()
+            val snap = _repo.getUserInfo(uid)
+            _snapShot.postValue(snap)
         }
+        _loader.postValue(false)
+    }
+
+    fun checkUserLogIn() {
+        _loader.postValue(true)
+        viewModelScope.launch {
+            val user = _repo.checkUser()
+            _user.postValue(user!!)
+        }
+        _loader.postValue(false)
     }
 
     fun logOut() {
