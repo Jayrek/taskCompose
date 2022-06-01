@@ -13,7 +13,7 @@ interface IAuthRepository {
 
     suspend fun signUpWithEmail(
         email: String,
-        password: String, fName: String, lName: String
+        password: String
     ): Resource<AuthResult>
 
     suspend fun getUserInfo(
@@ -21,4 +21,8 @@ interface IAuthRepository {
     ): Resource<DocumentSnapshot>
 
     fun checkUser(): FirebaseUser?
+
+    suspend fun saveUserInfo(uid: String, fName: String, lName: String, email: String) : Boolean
+
+    fun getCurrentUserId(): String?
 }

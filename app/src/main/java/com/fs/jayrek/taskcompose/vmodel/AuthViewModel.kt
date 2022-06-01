@@ -17,62 +17,70 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(private val _repo: IAuthRepository) : ViewModel() {
 
+    private val _loader = MutableLiveData(false)
     private val _authStatus = MutableLiveData<Resource<AuthResult>>()
     private val _snapShot = MutableLiveData<Resource<DocumentSnapshot>>()
     private val _user = MutableLiveData<FirebaseUser?>()
     private val _isLogOut: MutableLiveData<Resource<Boolean>> = MutableLiveData()
 
+    val loader: LiveData<Boolean> = _loader
     val authStatus: LiveData<Resource<AuthResult>> = _authStatus
     val snapShot: LiveData<Resource<DocumentSnapshot>> = _snapShot
     val user: LiveData<FirebaseUser?> = _user
     val isLogout: LiveData<Resource<Boolean>> = _isLogOut
 
     fun signIn(email: String, password: String) {
+        _loader.postValue(true)
         viewModelScope.launch {
-            try {
-                _authStatus.postValue(Resource.Loading())
-                val response = _repo.signInWithEmail(email, password)
-                _authStatus.postValue(response)
-            } catch (e: Exception) {
-                _authStatus.postValue(Resource.Error(e.message.toString()))
-            }
+            val response = _repo.signInWithEmail(email, password)
+            _authStatus.postValue(response)
         }
+        _loader.postValue(false)
     }
 
-    fun signUp(email: String, fName: String, lName: String, password: String) {
+    fun signUp(email: String, password: String) {
+        _loader.postValue(true)
         viewModelScope.launch {
-            try {
-                _authStatus.postValue(Resource.Loading())
-                val response = _repo.signUpWithEmail(email, password, fName, lName)
-                _authStatus.postValue(response)
-            } catch (e: Exception) {
-                _authStatus.postValue(Resource.Error(e.message.toString()))
+            val response = _repo.signUpWithEmail(email, password)
+            _authStatus.postValue(response)
+        }
+        _loader.postValue(false)
+    }
+
+    private fun getCurrentUserId(): String? = _repo.getCurrentUserId()
+
+    fun saveUserDocument(fName: String, lName: String, email: String): Boolean {
+        _loader.postValue(true)
+        return try {
+            val uid = getCurrentUserId().toString()
+            viewModelScope.launch {
+                _repo.saveUserInfo(uid, fName, lName, email)
             }
+            _loader.postValue(false)
+            true
+        } catch (e: Exception) {
+            _loader.postValue(false)
+            false
         }
     }
 
     fun getUser() {
+        _loader.postValue(true)
         viewModelScope.launch {
-            try {
-                _snapShot.postValue(Resource.Loading())
-                val uid = FirebaseAuth.getInstance().currentUser!!.uid
-                val snap = _repo.getUserInfo(uid)
-                _snapShot.postValue(snap)
-            } catch (e: Exception) {
-                _snapShot.postValue(Resource.Error(e.message.toString()))
-            }
+            val uid = getCurrentUserId().toString()
+            val snap = _repo.getUserInfo(uid)
+            _snapShot.postValue(snap)
         }
+        _loader.postValue(false)
     }
 
     fun checkUserLogIn() {
+        _loader.postValue(true)
         viewModelScope.launch {
-            try {
-                val repository = _repo.checkUser()
-                _user.postValue(repository!!)
-            } catch (e: Exception) {
-                _user.postValue(null)
-            }
+            val user = _repo.checkUser()
+            _user.postValue(user!!)
         }
+        _loader.postValue(false)
     }
 
     fun logOut() {
