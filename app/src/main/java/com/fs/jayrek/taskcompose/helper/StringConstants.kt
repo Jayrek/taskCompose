@@ -3,11 +3,6 @@ package com.fs.jayrek.taskcompose.helper
 object StringConstants {
 
     const val DOCUMENT_USER: String = "users"
-    const val HOME_WEB_URL: String =
-        "https://staging-home-playgoose-standalone.dsign.gift/artist/playgoose"
-
-    const val USER_ID = "2318752818"
-    const val USER_ACCOUNT = "akasoeiji"
 
     const val PLEASE_WAIT = "Please wait..."
     const val SIGNING_IN = "Signing in..."
